@@ -23,6 +23,12 @@
 
 #define SERVO_PIN 15
 
+#define MinX 250
+#define MaxX 4095
+#define MinY MinX
+#define MaxY MaxX
+
+
 
 // Please input the SSID and password of WiFi
 //const char* ssid = "io";
@@ -59,6 +65,7 @@ void setup()
     pinMode(XAxis_PIN, INPUT);
     pinMode(YAxis_PIN, INPUT);
     pinMode(JoyStickButton_PIN, INPUT);
+    digitalWrite(JoyStickButton_PIN, HIGH);
 
 }
 
@@ -66,11 +73,18 @@ void loop()
 {
     delay(100);
 
-    int Xdisplacement= digitalRead(XAxis_PIN);
-    int Ydisplacement= digitalRead(YAxis_PIN);
+    int ButtonPressed = digitalRead(JoyStickButton_PIN);
+    int Ydisplacement= 100*(analogRead(YAxis_PIN)-MinY)/(MaxY-MinY);
+    int Xdisplacement= 100*(analogRead(XAxis_PIN)-MinX)/(MaxX-MinX);
+    
+    Serial.print("Button= ");
+    Serial.print(ButtonPressed, DEC);
+    Serial.print("  (X,Y) = ("); 
     Serial.print(Ydisplacement, DEC);
-    Serial.printf("  ");
-    Serial.println(Xdisplacement,DEC);
+    Serial.printf(", ");
+    Serial.print(Xdisplacement, DEC);
+    Serial.println(")");
+
     //digitalWrite(LED_PIN, HIGH);     //pin HIGH = led OFF)
     //digitalWrite(LASER_PIN, HIGH);  //pin LOW = laser ON
     //delay(100);
